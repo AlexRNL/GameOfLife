@@ -1,0 +1,16 @@
+# Compilation target #
+*.class
+target
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Eclipse files #
+.settings
+.classpath
+.project
+
+# Virtual machine crash logs
+hs_err_pid*
