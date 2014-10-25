@@ -19,11 +19,11 @@ public class App {
 	/**
 	 * Constructor for the application.
 	 * @param arguments
-	 *            the arguments of the application.
+	 *        the arguments of the application.
 	 * @throws IllegalArgumentException
-	 *             if the arguments provided are invalid.
+	 *         if the arguments provided are invalid.
 	 */
-	public App(List<String> arguments) throws IllegalArgumentException {
+	public App (List<String> arguments) throws IllegalArgumentException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -41,10 +41,11 @@ public class App {
 	
 	/**
 	 * Entry point.
-	 * @param args the argument from the command line.
+	 * @param args
+	 *        the argument from the command line.
 	 */
-	public static void main(String[] args) {
+	public static void main (String[] args) {
 		new App(Arrays.asList(args)).launch();
 	}
-
+	
 }

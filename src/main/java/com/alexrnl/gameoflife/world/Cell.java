@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Cell {
 	/** The state of the cell */
 	private State	state;
-
+	
 	/**
 	 * Default constructor.
 	 */
