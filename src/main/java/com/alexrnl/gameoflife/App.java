@@ -5,16 +5,33 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.alexrnl.commons.arguments.Arguments;
+import com.alexrnl.commons.arguments.Param;
+import com.alexrnl.commons.error.ExceptionUtils;
+import com.alexrnl.commons.utils.object.Field;
+
 /**
  * Class which launches the game of life.
  * @author barfety_a
  */
 public class App {
 	/** Logger */
-	private static final Logger	LG				= Logger.getLogger(App.class.getName());
+	private static final Logger	LG					= Logger.getLogger(App.class.getName());
 	
 	/** The name of the program */
-	private static final String	PROGRAM_NAME	= "GameOfLife";
+	private static final String	PROGRAM_NAME		= "GameOfLife";
+	/** The default value for the alive ratio cell */
+	private static final double	DEFAULT_ALIVE_RATIO	= 0.3;
+	
+	/** The width of the world */
+	@Param(names = { "-w" }, description = "the width of the world", required = true)
+	private int					width;
+	/** The height of the world */
+	@Param(names = { "-h" }, description = "the height of the world", required = true)
+	private int					height;
+	/** The ratio of alive cells in the initial state */
+	@Param(names = { "-r" }, description = "the ratio of alive cell in the initial state")
+	private double				aliveRatio;
 	
 	/**
 	 * Constructor for the application.
@@ -25,7 +42,19 @@ public class App {
 	 */
 	public App (List<String> arguments) throws IllegalArgumentException {
 		super();
-		// TODO Auto-generated constructor stub
+		aliveRatio = DEFAULT_ALIVE_RATIO;
+		new Arguments(PROGRAM_NAME, this).parse(arguments);
+		
+		// Validate arguments
+		if (width < 0) {
+			throw new IllegalArgumentException("Null or negative width is not allowed");
+		}
+		if (height < 0) {
+			throw new IllegalArgumentException("Null or negative height is not allowed");
+		}
+		if (aliveRatio < 0 || aliveRatio > 1.0) {
+			throw new IllegalArgumentException("Ratio of alive cells must be between 0 and 1");
+		}
 	}
 	
 	/**
@@ -45,7 +74,13 @@ public class App {
 	 *        the argument from the command line.
 	 */
 	public static void main (String[] args) {
-		new App(Arrays.asList(args)).launch();
+		try {
+			new App(Arrays.asList(args)).launch();
+		} catch (IllegalArgumentException e) {
+			System.err
+					.println("Could not start " + PROGRAM_NAME + ": " + ExceptionUtils.display(e));
+			e.printStackTrace();
+		}
 	}
 	
 }
