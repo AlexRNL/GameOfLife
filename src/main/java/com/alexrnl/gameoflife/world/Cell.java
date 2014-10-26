@@ -12,8 +12,10 @@ public class Cell {
 	
 	/**
 	 * Default constructor.
+	 * @param state
+	 *        the state of the cell.
 	 */
-	public Cell (State state) {
+	public Cell (final State state) {
 		super();
 		this.state = Objects.requireNonNull(state);
 	}
