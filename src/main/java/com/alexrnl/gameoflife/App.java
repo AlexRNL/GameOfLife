@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import com.alexrnl.commons.arguments.Arguments;
 import com.alexrnl.commons.arguments.Param;
 import com.alexrnl.commons.error.ExceptionUtils;
-import com.alexrnl.commons.utils.object.Field;
 
 /**
  * Class which launches the game of life.
@@ -31,7 +30,7 @@ public class App {
 	private int					height;
 	/** The ratio of alive cells in the initial state */
 	@Param(names = { "-r" }, description = "the ratio of alive cell in the initial state")
-	private double				aliveRatio;
+	private final double				aliveRatio;
 	
 	/**
 	 * Constructor for the application.
@@ -40,7 +39,7 @@ public class App {
 	 * @throws IllegalArgumentException
 	 *         if the arguments provided are invalid.
 	 */
-	public App (List<String> arguments) throws IllegalArgumentException {
+	public App (final List<String> arguments) throws IllegalArgumentException {
 		super();
 		aliveRatio = DEFAULT_ALIVE_RATIO;
 		new Arguments(PROGRAM_NAME, this).parse(arguments);
@@ -61,11 +60,13 @@ public class App {
 	 * Launch the application.
 	 */
 	public void launch () {
-		if (LG.isLoggable(Level.INFO))
+		if (LG.isLoggable(Level.INFO)) {
 			LG.info("Launching " + PROGRAM_NAME);
+		}
 		
-		if (LG.isLoggable(Level.INFO))
+		if (LG.isLoggable(Level.INFO)) {
 			LG.info("Exiting " + PROGRAM_NAME);
+		}
 	}
 	
 	/**
@@ -73,10 +74,10 @@ public class App {
 	 * @param args
 	 *        the argument from the command line.
 	 */
-	public static void main (String[] args) {
+	public static void main (final String[] args) {
 		try {
 			new App(Arrays.asList(args)).launch();
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			System.err
 					.println("Could not start " + PROGRAM_NAME + ": " + ExceptionUtils.display(e));
 			e.printStackTrace();
