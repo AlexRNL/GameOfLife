@@ -9,7 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author barfety_a
  */
 @RunWith(Suite.class)
-@SuiteClasses({ CellTest.class })
+@SuiteClasses({ CellTest.class, WorldTest.class })
 public class WorldTests {
 	
 }

@@ -3,6 +3,7 @@ package com.alexrnl.gameoflife.world;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import com.alexrnl.commons.utils.object.ImmutablePair;
 
@@ -22,12 +23,18 @@ public class World {
 	 * Constructor #1.<br />
 	 * Initialize a world with the dimension specified, and dead cells.
 	 * @param width
-	 *        the width of the world.
+	 *        the width of the world (must be >1).
 	 * @param height
-	 *        the height of the world.
+	 *        the height of the world (must be >1).
 	 */
 	public World (final int width, final int height) {
 		super();
+		if (width < 1) {
+			throw new IllegalArgumentException("Cannot build world with width=" + width + ", minimum value is 1");
+		}
+		if (height < 1) {
+			throw new IllegalArgumentException("Cannot build world with height=" + height + ", minimum value is 1");
+		}
 		this.width = width;
 		this.height = height;
 		final Map<ImmutablePair<Integer, Integer>, Cell> cellsMap = new HashMap<>(width*height, 1.0f);
@@ -58,12 +65,16 @@ public class World {
 	/**
 	 * Return the cell at the position specified.
 	 * @param x
-	 *        the position on the x axis of the grid (from 0 to {@link #getWidth()}).
+	 *        the position on the x axis of the grid (from 1 to {@link #getWidth()} - inclusive).
 	 * @param y
-	 *        the position on the y axis of the grid (from 0 to {@link #getHeight()}).
+	 *        the position on the y axis of the grid (from 1 to {@link #getHeight()} - inclusive).
 	 * @return the cell at this position.
 	 */
 	public Cell getCellAt (final int x, final int y) {
-		return cells.get(new ImmutablePair<>(x, y));
+		final ImmutablePair<Integer, Integer> key = new ImmutablePair<>(x, y);
+		if (!cells.containsKey(key)) {
+			throw new NoSuchElementException("No cell at " + key);
+		}
+		return cells.get(key);
 	}
 }
