@@ -1,5 +1,6 @@
 package com.alexrnl.gameoflife.world;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,10 @@ import com.alexrnl.commons.utils.object.ImmutablePair;
  * Class representing the world with the cells.
  * @author barfety_a
  */
-public class World {
+public class World implements Serializable {
+	/** The serial version UID */
+	private static final long	serialVersionUID	= 1L;
+	
 	/** The width of the world */
 	private final int											width;
 	/** The height of the world */

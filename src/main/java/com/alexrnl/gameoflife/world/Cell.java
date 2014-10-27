@@ -1,12 +1,16 @@
 package com.alexrnl.gameoflife.world;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A single cell of the game of life.
  * @author barfety_a
  */
-public class Cell {
+public class Cell implements Serializable {
+	/** The serial version UID */
+	private static final long	serialVersionUID	= 1L;
+	
 	/** The state of the cell */
 	private State	state;
 	
