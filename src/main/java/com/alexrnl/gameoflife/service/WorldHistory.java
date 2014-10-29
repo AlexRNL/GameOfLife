@@ -6,7 +6,10 @@ import java.io.ObjectOutputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.bind.DatatypeConverter;
 
 import com.alexrnl.commons.error.ExceptionUtils;
 import com.alexrnl.gameoflife.world.World;
@@ -43,13 +46,18 @@ public class WorldHistory {
 	 * Add a new world to the history.
 	 * @param world
 	 *        the world to add.
-	 * @return <code>true</code> if the world has already been generated.
+	 * @return the generation which had the same world, {@link #NO_PREVIOUS_OCCURENCE} if this
+	 *         generation is unique.
 	 */
 	public int addHistory (final World world) {
 		final String hash = computeHash(world);
 		
+		if (LG.isLoggable(Level.INFO)) {
+			LG.info("Hash for world is: " + hash);
+		}
+		
 		if (history.contains(hash)) {
-			return history.indexOf(hash);
+			return history.indexOf(hash) + 1;
 		}
 		history.add(hash);
 		return NO_PREVIOUS_OCCURENCE;
@@ -72,6 +80,6 @@ public class WorldHistory {
 			LG.warning("Could not compute hash of world: " + ExceptionUtils.display(e));
 		}
 		
-		return new String(hashAlgorithm.digest());
+		return DatatypeConverter.printHexBinary(hashAlgorithm.digest());
 	}
 }
