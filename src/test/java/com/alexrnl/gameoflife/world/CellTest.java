@@ -74,4 +74,17 @@ public class CellTest {
 		deadCell.live();
 		assertTrue(deadCell.isAlive());
 	}
+	
+	/**
+	 * Test method for {@link Cell#clone()}.
+	 * @throws CloneNotSupportedException
+	 *         if a clone cannot be performed.
+	 */
+	@Test
+	public void testClone () throws CloneNotSupportedException {
+		final Cell clone = aliveCell.clone();
+		clone.die();
+		assertTrue(clone.isDead());
+		assertFalse(aliveCell.isDead());
+	}
 }

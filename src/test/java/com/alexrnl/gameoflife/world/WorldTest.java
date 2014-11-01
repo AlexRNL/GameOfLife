@@ -1,6 +1,7 @@
 package com.alexrnl.gameoflife.world;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -82,5 +83,18 @@ public class WorldTest {
 	@Test(expected = NoSuchElementException.class)
 	public void testGetNonExistingCell () {
 		world.getCellAt(0, 4);
+	}
+	
+	/**
+	 * Test method for {@link World#clone()}.
+	 * @throws CloneNotSupportedException
+	 *         if a clone cannot be performed.
+	 */
+	@Test
+	public void testClone () throws CloneNotSupportedException {
+		final World clone = world.clone();
+		clone.getCellAt(2, 4).live();
+		assertTrue(clone.getCellAt(2, 4).isAlive());
+		assertFalse(world.getCellAt(2, 4).isAlive());
 	}
 }

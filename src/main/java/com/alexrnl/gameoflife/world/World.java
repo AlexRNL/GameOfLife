@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 import com.alexrnl.commons.utils.object.ImmutablePair;
@@ -12,7 +13,7 @@ import com.alexrnl.commons.utils.object.ImmutablePair;
  * Class representing the world with the cells.
  * @author barfety_a
  */
-public class World implements Serializable {
+public class World implements Serializable, Cloneable {
 	/** The serial version UID */
 	private static final long	serialVersionUID	= 1L;
 	
@@ -21,7 +22,7 @@ public class World implements Serializable {
 	/** The height of the world */
 	private final int											height;
 	/** The grid of cells */
-	private final Map<ImmutablePair<Integer, Integer>, Cell>	cells;
+	private Map<ImmutablePair<Integer, Integer>, Cell>			cells;
 	
 	/**
 	 * Constructor #1.<br />
@@ -81,4 +82,16 @@ public class World implements Serializable {
 		}
 		return cells.get(key);
 	}
+	
+	@Override
+	public World clone () throws CloneNotSupportedException {
+		final World clone = (World) super.clone();
+		final Map<ImmutablePair<Integer, Integer>, Cell> cloneCells = new HashMap<>();
+		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : cells.entrySet()) {
+			cloneCells.put(entry.getKey(), entry.getValue().clone());
+		}
+		clone.cells = Collections.unmodifiableMap(cloneCells);
+		return clone;
+	}
+	
 }

@@ -7,7 +7,7 @@ import java.util.Objects;
  * A single cell of the game of life.
  * @author barfety_a
  */
-public class Cell implements Serializable {
+public class Cell implements Serializable, Cloneable {
 	/** The serial version UID */
 	private static final long	serialVersionUID	= 1L;
 	
@@ -52,5 +52,10 @@ public class Cell implements Serializable {
 	 */
 	public void live () {
 		state = State.ALIVE;
+	}
+	
+	@Override
+	protected Cell clone () throws CloneNotSupportedException {
+		return (Cell) super.clone();
 	}
 }
