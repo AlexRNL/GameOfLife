@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.DatatypeConverter;
 
 import com.alexrnl.commons.error.ExceptionUtils;
+import com.alexrnl.commons.error.TopLevelError;
 import com.alexrnl.gameoflife.world.World;
 
 /**
@@ -77,7 +78,9 @@ public class WorldHistory {
 			out.writeObject(world);
 			hashAlgorithm.update(byteArrayOutputStream.toByteArray());
 		} catch (final IOException e) {
-			LG.warning("Could not compute hash of world: " + ExceptionUtils.display(e));
+			// This should not have happened, the ByteArrayOutputStream does not throw this exception
+			LG.severe("Could not compute hash of world: " + ExceptionUtils.display(e));
+			throw new TopLevelError("Hash computation failed via serialization", e);
 		}
 		
 		return DatatypeConverter.printHexBinary(hashAlgorithm.digest());

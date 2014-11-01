@@ -2,7 +2,11 @@ package com.alexrnl.gameoflife.service;
 
 import static com.alexrnl.gameoflife.service.WorldHistory.NO_PREVIOUS_OCCURENCE;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
@@ -11,6 +15,7 @@ import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.alexrnl.commons.error.TopLevelError;
 import com.alexrnl.gameoflife.world.World;
 
 /**
@@ -49,4 +54,14 @@ public class WorldHistoryTest {
 		Logger.getLogger(WorldHistory.class.getName()).setLevel(Level.INFO);
 	}
 	
+	/**
+	 * Check that a {@link TopLevelError} is thrown when the hash cannot be computed.
+	 */
+	@Test(expected = TopLevelError.class)
+	public void testAddHistoryWithException () {
+		final MessageDigest hashAlgorithm = mock(MessageDigest.class);
+		worldHistory = new WorldHistory(hashAlgorithm);
+		doThrow(IOException.class).when(hashAlgorithm).update(any(byte[].class));
+		worldHistory.addHistory(world);
+	}
 }
