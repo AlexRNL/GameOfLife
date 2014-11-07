@@ -36,15 +36,47 @@ public class WorldGrower {
 	 * coordinates.
 	 * @param world
 	 *        the world in which the cells are.
+	 * @param cellCoordinates
+	 *        the coordinates of the cell.
 	 * @return the number of living neighbours.
 	 */
 	protected int getNumberOfLivingNeighbours (final World world, final ImmutablePair<Integer, Integer> cellCoordinates) {
-		final int numberOfLivingNeighbours = 0;
-		final int leftLine = cellCoordinates.getLeft() - 1;
-		final int rightLine = cellCoordinates.getLeft() + 1;
-		final int upperLine = cellCoordinates.getRight() - 1;
-		final int lowerLine = cellCoordinates.getRight() + 1;
+		int numberOfLivingNeighbours = 0;
+		final int centerLine = cellCoordinates.getLeft();
+		final int leftLine = centerLine == 1 ? world.getWidth() : centerLine - 1;
+		final int rightLine = centerLine == world.getWidth() ? 1 : centerLine + 1;
+		final int middleLine = cellCoordinates.getRight();
+		final int upperLine = middleLine == 1 ? world.getHeight() : middleLine - 1;
+		final int lowerLine = middleLine == world.getHeight() ? 1 : middleLine + 1;
 		
+		// Left line
+		if (world.getCellAt(leftLine, upperLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+		if (world.getCellAt(leftLine, middleLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+		if (world.getCellAt(leftLine, lowerLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+		// Center line
+		if (world.getCellAt(centerLine, upperLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+		if (world.getCellAt(centerLine, lowerLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+		// Right line
+		if (world.getCellAt(rightLine, upperLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+		if (world.getCellAt(rightLine, middleLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+		if (world.getCellAt(rightLine, lowerLine).isAlive()) {
+			numberOfLivingNeighbours++;
+		}
+
 		return numberOfLivingNeighbours;
 	}
 }
