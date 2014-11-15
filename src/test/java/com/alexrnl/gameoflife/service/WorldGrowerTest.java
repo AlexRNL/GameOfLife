@@ -2,12 +2,15 @@ package com.alexrnl.gameoflife.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.alexrnl.commons.error.TopLevelError;
 import com.alexrnl.commons.utils.object.ImmutablePair;
 import com.alexrnl.gameoflife.world.Cell;
 import com.alexrnl.gameoflife.world.World;
@@ -57,6 +60,18 @@ public class WorldGrowerTest {
 				assertTrue(entry.getValue().isDead());
 			}
 		}
+	}
+	
+	/**
+	 * Test that a {@link TopLevelError} is thrown when a clone exception occurs.
+	 * @throws CloneNotSupportedException
+	 *         should not be thrown.
+	 */
+	@Test(expected = TopLevelError.class)
+	public void testComputeNextGenerationCloneException () throws CloneNotSupportedException {
+		final World mockedWorld = mock(World.class);
+		when(mockedWorld.clone()).thenThrow(new CloneNotSupportedException());
+		grower.computeNextGeneration(mockedWorld);
 	}
 	
 	/**
