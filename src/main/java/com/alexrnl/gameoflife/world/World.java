@@ -3,6 +3,7 @@ package com.alexrnl.gameoflife.world;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
@@ -10,10 +11,10 @@ import java.util.NoSuchElementException;
 import com.alexrnl.commons.utils.object.ImmutablePair;
 
 /**
- * Class representing the world with the cells.
+ * Class representing the world with the cells.<br />
  * @author barfety_a
  */
-public class World implements Serializable, Cloneable {
+public class World implements Serializable, Cloneable, Iterable<Entry<ImmutablePair<Integer, Integer>, Cell>> {
 	/** The serial version UID */
 	private static final long	serialVersionUID	= 1L;
 	
@@ -92,6 +93,11 @@ public class World implements Serializable, Cloneable {
 		}
 		clone.cells = Collections.unmodifiableMap(cloneCells);
 		return clone;
+	}
+	
+	@Override
+	public Iterator<Entry<ImmutablePair<Integer, Integer>, Cell>> iterator () {
+		return cells.entrySet().iterator();
 	}
 	
 }

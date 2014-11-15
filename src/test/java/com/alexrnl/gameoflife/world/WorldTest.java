@@ -5,10 +5,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.alexrnl.commons.utils.object.ImmutablePair;
 
 /**
  * Test suite for the {@link World} class.
@@ -96,5 +100,20 @@ public class WorldTest {
 		clone.getCellAt(2, 4).live();
 		assertTrue(clone.getCellAt(2, 4).isAlive());
 		assertFalse(world.getCellAt(2, 4).isAlive());
+	}
+	
+	/**
+	 * Test method for {@link World#iterator()}.
+	 */
+	@Test
+	public void testIterator () {
+		final Iterator<Entry<ImmutablePair<Integer, Integer>, Cell>> iterator = world.iterator();
+		assertNotNull(iterator);
+		int nbCells = 0;
+		while (iterator.hasNext()) {
+			iterator.next();
+			nbCells++;
+		}
+		assertEquals(world.getHeight() * world.getWidth(), nbCells);
 	}
 }
