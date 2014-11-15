@@ -1,13 +1,15 @@
 package com.alexrnl.gameoflife.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Map.Entry;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.alexrnl.commons.utils.object.ImmutablePair;
+import com.alexrnl.gameoflife.world.Cell;
 import com.alexrnl.gameoflife.world.World;
 
 /**
@@ -32,9 +34,29 @@ public class WorldGrowerTest {
 	/**
 	 * Test method for {@link WorldGrower#computeNextGeneration(World)}.
 	 */
-	@Ignore @Test
+	@Test
 	public void testComputeNextGeneration () {
-		fail("Not yet implemented"); // TODO
+		world.getCellAt(2, 1).live();
+		world.getCellAt(2, 2).live();
+		world.getCellAt(2, 3).live();
+		grower.computeNextGeneration(world);
+		
+		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
+			if (entry.getKey().getRight() == 2 && entry.getKey().getLeft() < 4) {
+				assertTrue(entry.getValue().isAlive());
+			} else {
+				assertTrue(entry.getValue().isDead());
+			}
+		}
+		
+		grower.computeNextGeneration(world);
+		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
+			if (entry.getKey().getLeft() == 2 && entry.getKey().getRight() < 4) {
+				assertTrue(entry.getValue().isAlive());
+			} else {
+				assertTrue(entry.getValue().isDead());
+			}
+		}
 	}
 	
 	/**

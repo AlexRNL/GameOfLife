@@ -1,12 +1,16 @@
 package com.alexrnl.gameoflife.service;
 
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
+import com.alexrnl.commons.error.ExceptionUtils;
+import com.alexrnl.commons.error.TopLevelError;
 import com.alexrnl.commons.utils.object.ImmutablePair;
+import com.alexrnl.gameoflife.world.Cell;
 import com.alexrnl.gameoflife.world.World;
 
 /**
- * TODO
+ * Class which grows a {@link World}.<br />
  * @author barfety_a
  */
 public class WorldGrower {
@@ -27,8 +31,30 @@ public class WorldGrower {
 	 *        the world to use.
 	 */
 	public void computeNextGeneration (final World world) {
-		// TODO Auto-generated method stub
+		final World reference;
+		try {
+			reference = world.clone();
+		} catch (final CloneNotSupportedException e) {
+			// This should not have happened, the clone method does not throw this exception for the World class
+			LG.severe("Could not create clone of world: " + ExceptionUtils.display(e));
+			throw new TopLevelError("Clone failed for World class", e);
+		}
 		
+		for (final Entry<ImmutablePair<Integer,Integer>, Cell> entry : world) {
+			switch (getNumberOfLivingNeighbours(reference, entry.getKey())) {
+				case 2:
+					// Nothing happens: live cells keep on living and dead cells stay dead
+					break;
+				case 3:
+					// Dead cells are brought to live
+					entry.getValue().live();
+					break;
+				default:
+					// Over and under population cases
+					entry.getValue().die();
+					break;
+			}
+		}
 	}
 	
 	/**
