@@ -16,7 +16,7 @@ import com.alexrnl.gameoflife.world.World;
  */
 public class GameOfLifeController {
 	/** Logger */
-	private final static Logger			LG	= Logger.getLogger(GameOfLifeController.class.getName());
+	private static final Logger			LG	= Logger.getLogger(GameOfLifeController.class.getName());
 	
 	/** The listeners on the world generation */
 	private final List<WorldListener>	worldListeners;
