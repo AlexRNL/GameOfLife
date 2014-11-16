@@ -15,14 +15,46 @@ import com.alexrnl.gameoflife.world.World;
  */
 public class WorldGrower {
 	/** Logger */
-	private static final Logger	LG	= Logger.getLogger(WorldGrower.class.getName());
+	private static final Logger	LG									= Logger.getLogger(WorldGrower.class.getName());
+	
+	/** The default threshold under which a cell is dying of under population */
+	private static final int	DEFAULT_UNDER_POPULATION_THRESHOLD	= 2;
+	/** The default threshold over which a cell is dying of over population */
+	private static final int	DEFAULT_OVER_POPULATION_THRESHOLD	= 3;
+	
+	/** The threshold under which a cell is dying of under population */
+	private final int			underPopulationThreshold;
+	/** The threshold over which a cell is dying of over population */
+	private final int			overPopulationThreshold;
 	
 	/**
 	 * Constructor #1.<br />
+	 * @param underPopulationThreshold
+	 *        the threshold under which a cell is dying of under population.
+	 * @param overPopulationThreshold
+	 *        the threshold over which a cell is dying of over population (a cell is coming to life
+	 *        is the number of living neighbours is <i>exactly</i> this value.
+	 * @throws IllegalArgumentException
+	 *         if the under population threshold is over the over population
+	 *         threshold.
+	 */
+	public WorldGrower (final int underPopulationThreshold, final int overPopulationThreshold) throws IllegalArgumentException {
+		super();
+		if (underPopulationThreshold > overPopulationThreshold) {
+			throw new IllegalArgumentException("Bad threshold for over/under population (over-population: "
+					+ overPopulationThreshold + "; under-population: " + underPopulationThreshold);
+		}
+		
+		this.underPopulationThreshold = underPopulationThreshold;
+		this.overPopulationThreshold = overPopulationThreshold;
+	}
+
+	/**
+	 * Constructor #2.<br />
 	 * Default constructor.
 	 */
 	public WorldGrower () {
-		super();
+		this(DEFAULT_UNDER_POPULATION_THRESHOLD, DEFAULT_OVER_POPULATION_THRESHOLD);
 	}
 	
 	/**
@@ -41,18 +73,17 @@ public class WorldGrower {
 		}
 		
 		for (final Entry<ImmutablePair<Integer,Integer>, Cell> entry : world) {
-			switch (getNumberOfLivingNeighbours(reference, entry.getKey())) {
-				case 2:
-					// Nothing happens: live cells keep on living and dead cells stay dead
-					break;
-				case 3:
-					// Dead cells are brought to live
-					entry.getValue().live();
-					break;
-				default:
-					// Over and under population cases
-					entry.getValue().die();
-					break;
+			final int livingNeighbours = getNumberOfLivingNeighbours(reference, entry.getKey());
+			final Cell cell = entry.getValue();
+			if (livingNeighbours < underPopulationThreshold
+					|| overPopulationThreshold < livingNeighbours) {
+				// Over and under population cases
+				cell.die();
+			} else if (livingNeighbours == overPopulationThreshold) {
+				// Dead cells are brought to life
+				cell.live();
+			} else {
+				// Nothing happens: live cells keep on living and dead cells stay dead
 			}
 		}
 	}

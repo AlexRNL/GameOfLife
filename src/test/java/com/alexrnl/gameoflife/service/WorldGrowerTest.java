@@ -35,29 +35,81 @@ public class WorldGrowerTest {
 	}
 	
 	/**
-	 * Test method for {@link WorldGrower#computeNextGeneration(World)}.
+	 * Test that thresholds with invalid values are not permitted.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testInvalidThresolds () {
+		new WorldGrower(5, 4);
+	}
+	
+	/**
+	 * Test method for {@link WorldGrower#computeNextGeneration(World)}.<br />
+	 * Test a basic pattern:
+	 * +----+    +----+    +----+
+	 * | x  |    |    |    | x  |
+	 * | x  | => |xxx | => | x  |
+	 * | x  |    |    |    | x  |
+	 * |    |    |    |    |    |
+	 * +----+    +----+    +----+
 	 */
 	@Test
-	public void testComputeNextGeneration () {
+	public void testComputeNextGenerationBasicPattern () {
 		world.getCellAt(2, 1).live();
 		world.getCellAt(2, 2).live();
 		world.getCellAt(2, 3).live();
 		grower.computeNextGeneration(world);
 		
 		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
+			Cell cell = entry.getValue();
 			if (entry.getKey().getRight() == 2 && entry.getKey().getLeft() < 4) {
-				assertTrue(entry.getValue().isAlive());
+				assertTrue(cell.isAlive());
 			} else {
-				assertTrue(entry.getValue().isDead());
+				assertTrue(cell.isDead());
 			}
 		}
 		
 		grower.computeNextGeneration(world);
 		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
+			Cell cell = entry.getValue();
 			if (entry.getKey().getLeft() == 2 && entry.getKey().getRight() < 4) {
-				assertTrue(entry.getValue().isAlive());
+				assertTrue(cell.isAlive());
 			} else {
-				assertTrue(entry.getValue().isDead());
+				assertTrue(cell.isDead());
+			}
+		}
+	}
+	
+	/**
+	 * Test method for {@link WorldGrower#computeNextGeneration(World)}.<br />
+	 * Test with an over-population case:
+	 * +----+    +----+
+	 * |    |    | x  |
+	 * |xxx | => |x x |
+	 * |xxx |    |x x |
+	 * |    |    | x  |
+	 * +----+    +----+
+	 */
+	@Test
+	public void testComputeNextGenerationWithOverPopulation () {
+		world.getCellAt(1, 2).live();
+		world.getCellAt(2, 2).live();
+		world.getCellAt(3, 2).live();
+		world.getCellAt(1, 3).live();
+		world.getCellAt(2, 3).live();
+		world.getCellAt(3, 3).live();
+		grower.computeNextGeneration(world);
+		
+		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
+			final int x = entry.getKey().getLeft();
+			final int y = entry.getKey().getRight();
+			Cell cell = entry.getValue();
+			if ((x == 1 || x == 3) && (y == 2 || y == 3)) {
+				assertTrue(cell.isAlive());
+			} else if (x == 2 && (y == 1 || y == 4)) {
+				assertTrue(cell.isAlive());
+			} else {
+				assertTrue(cell.isDead());
 			}
 		}
 	}
