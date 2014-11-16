@@ -11,12 +11,15 @@ import com.alexrnl.commons.error.TopLevelError;
 import com.alexrnl.gameoflife.world.World;
 
 /**
- * TODO
+ * Controller for a game of life.<br />
  * @author barfety_a
  */
 public class GameOfLifeController {
 	/** Logger */
-	private static final Logger			LG	= Logger.getLogger(GameOfLifeController.class.getName());
+	private static final Logger			LG					= Logger.getLogger(GameOfLifeController.class.getName());
+	
+	/** The name of the default algorithm for computing hashes */
+	private static final String			DEFAULT_ALGORITHM	= "SHA-1";
 	
 	/** The listeners on the world generation */
 	private final List<WorldListener>	worldListeners;
@@ -31,12 +34,27 @@ public class GameOfLifeController {
 	 * Constructor #1.<br />
 	 * @param initialGeneration
 	 *        the initial generation of the world.
+	 * @throws NoSuchAlgorithmException
+	 *         if the algorithm does not exist in the JVM.
 	 */
 	public GameOfLifeController (final World initialGeneration) throws NoSuchAlgorithmException {
+		this(initialGeneration, DEFAULT_ALGORITHM);
+	}
+
+	/**
+	 * Constructor #2.<br />
+	 * @param initialGeneration
+	 *        the initial generation of the world.
+	 * @param algorithmName
+	 *        the name of the algorithm for history hashes generation.
+	 * @throws NoSuchAlgorithmException
+	 *         if the algorithm does not exist in the JVM.
+	 */
+	public GameOfLifeController (final World initialGeneration, final String algorithmName) throws NoSuchAlgorithmException {
 		super();
 		worldListeners = new ArrayList<>();
 		currentGeneration = initialGeneration;
-		history = new WorldHistory(MessageDigest.getInstance("SHA-1"));
+		history = new WorldHistory(MessageDigest.getInstance(algorithmName));
 		grower = new WorldGrower();
 	}
 	
