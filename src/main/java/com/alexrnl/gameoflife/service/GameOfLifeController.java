@@ -56,6 +56,9 @@ public class GameOfLifeController {
 		currentGeneration = initialGeneration;
 		history = new WorldHistory(MessageDigest.getInstance(algorithmName));
 		grower = new WorldGrower();
+		
+		// Put initial generation in history
+		history.addHistory(currentGeneration);
 	}
 	
 	/**
@@ -113,6 +116,8 @@ public class GameOfLifeController {
 				// This should not have happened, the world is cloneable
 				LG.severe("Failed to clone world for listeners: " + ExceptionUtils.display(e));
 				throw new TopLevelError("World clone failed", e);
+			} catch (final Exception e) {
+				LG.warning("Exception while calling listener " + worldListener + ": " + ExceptionUtils.display(e));
 			}
 		}
 	}
