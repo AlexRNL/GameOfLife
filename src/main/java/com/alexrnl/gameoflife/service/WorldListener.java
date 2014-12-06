@@ -10,10 +10,10 @@ public interface WorldListener {
 	
 	/**
 	 * Called when a new generation has been generated.
-	 * @param word
+	 * @param world
 	 *        the world generated.
 	 */
-	void newGeneration (World word);
+	void newGeneration (World world);
 	
 	/**
 	 * Called when a world that was previously generated is generated again.
