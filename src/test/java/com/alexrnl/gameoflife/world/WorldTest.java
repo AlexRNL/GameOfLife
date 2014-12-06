@@ -12,8 +12,6 @@ import java.util.NoSuchElementException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.alexrnl.commons.utils.object.ImmutablePair;
-
 /**
  * Test suite for the {@link World} class.
  * @author barfety_a
@@ -107,7 +105,7 @@ public class WorldTest {
 	 */
 	@Test
 	public void testIterator () {
-		final Iterator<Entry<ImmutablePair<Integer, Integer>, Cell>> iterator = world.iterator();
+		final Iterator<Entry<Coordinates, Cell>> iterator = world.iterator();
 		assertNotNull(iterator);
 		int nbCells = 0;
 		while (iterator.hasNext()) {

@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.alexrnl.commons.error.TopLevelError;
-import com.alexrnl.commons.utils.object.ImmutablePair;
 import com.alexrnl.gameoflife.world.Cell;
+import com.alexrnl.gameoflife.world.Coordinates;
 import com.alexrnl.gameoflife.world.World;
 
 /**
@@ -60,9 +60,9 @@ public class WorldGrowerTest {
 		world.getCellAt(2, 3).live();
 		grower.computeNextGeneration(world);
 		
-		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
-			Cell cell = entry.getValue();
-			if (entry.getKey().getRight() == 2 && entry.getKey().getLeft() < 4) {
+		for (final Entry<Coordinates, Cell> entry : world) {
+			final Cell cell = entry.getValue();
+			if (entry.getKey().getY() == 2 && entry.getKey().getX() < 4) {
 				assertTrue(cell.isAlive());
 			} else {
 				assertTrue(cell.isDead());
@@ -70,9 +70,9 @@ public class WorldGrowerTest {
 		}
 		
 		grower.computeNextGeneration(world);
-		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
-			Cell cell = entry.getValue();
-			if (entry.getKey().getLeft() == 2 && entry.getKey().getRight() < 4) {
+		for (final Entry<Coordinates, Cell> entry : world) {
+			final Cell cell = entry.getValue();
+			if (entry.getKey().getX() == 2 && entry.getKey().getY() < 4) {
 				assertTrue(cell.isAlive());
 			} else {
 				assertTrue(cell.isDead());
@@ -100,10 +100,10 @@ public class WorldGrowerTest {
 		world.getCellAt(3, 3).live();
 		grower.computeNextGeneration(world);
 		
-		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : world) {
-			final int x = entry.getKey().getLeft();
-			final int y = entry.getKey().getRight();
-			Cell cell = entry.getValue();
+		for (final Entry<Coordinates, Cell> entry : world) {
+			final int x = entry.getKey().getX();
+			final int y = entry.getKey().getY();
+			final Cell cell = entry.getValue();
 			if ((x == 1 || x == 3) && (y == 2 || y == 3)) {
 				assertTrue(cell.isAlive());
 			} else if (x == 2 && (y == 1 || y == 4)) {
@@ -127,30 +127,30 @@ public class WorldGrowerTest {
 	}
 	
 	/**
-	 * Test method for {@link WorldGrower#getNumberOfLivingNeighbours(World, ImmutablePair)}.
+	 * Test method for {@link WorldGrower#getNumberOfLivingNeighbours(World, Coordinates)}.
 	 */
 	@Test
 	public void testGetNumberOfLivingNeighbours () {
 		world.getCellAt(1, 1).live();
-		assertEquals(0, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(1, 1)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(1, 2)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(2, 1)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(2, 2)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(4, 1)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(4, 2)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(1, 4)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(2, 4)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(4, 4)));
+		assertEquals(0, grower.getNumberOfLivingNeighbours(world, new Coordinates(1, 1)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(1, 2)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(2, 1)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(2, 2)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(4, 1)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(4, 2)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(1, 4)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(2, 4)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(4, 4)));
 		
 		world.getCellAt(3, 2).live();
-		assertEquals(0, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(1, 1)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(1, 2)));
-		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(2, 1)));
-		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(2, 2)));
-		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(4, 1)));
-		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(4, 2)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(1, 4)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(2, 4)));
-		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new ImmutablePair<>(4, 4)));
+		assertEquals(0, grower.getNumberOfLivingNeighbours(world, new Coordinates(1, 1)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(1, 2)));
+		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new Coordinates(2, 1)));
+		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new Coordinates(2, 2)));
+		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new Coordinates(4, 1)));
+		assertEquals(2, grower.getNumberOfLivingNeighbours(world, new Coordinates(4, 2)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(1, 4)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(2, 4)));
+		assertEquals(1, grower.getNumberOfLivingNeighbours(world, new Coordinates(4, 4)));
 	}
 }

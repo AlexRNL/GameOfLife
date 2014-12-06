@@ -8,22 +8,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
-import com.alexrnl.commons.utils.object.ImmutablePair;
-
 /**
  * Class representing the world with the cells.<br />
  * @author barfety_a
  */
-public class World implements Serializable, Cloneable, Iterable<Entry<ImmutablePair<Integer, Integer>, Cell>> {
+public class World implements Serializable, Cloneable, Iterable<Entry<Coordinates, Cell>> {
 	/** The serial version UID */
-	private static final long	serialVersionUID	= 1L;
+	private static final long		serialVersionUID	= 1L;
 	
 	/** The width of the world */
-	private final int											width;
+	private final int				width;
 	/** The height of the world */
-	private final int											height;
+	private final int				height;
 	/** The grid of cells */
-	private Map<ImmutablePair<Integer, Integer>, Cell>			cells;
+	private Map<Coordinates, Cell>	cells;
 	
 	/**
 	 * Constructor #1.<br />
@@ -43,10 +41,10 @@ public class World implements Serializable, Cloneable, Iterable<Entry<ImmutableP
 		}
 		this.width = width;
 		this.height = height;
-		final Map<ImmutablePair<Integer, Integer>, Cell> cellsMap = new HashMap<>(width*height, 1.0f);
+		final Map<Coordinates, Cell> cellsMap = new HashMap<>(width*height, 1.0f);
 		for (int indexWidth = 1; indexWidth <= width; indexWidth++) {
 			for (int indexHeight = 1; indexHeight <= height; indexHeight++) {
-				cellsMap.put(new ImmutablePair<>(indexWidth, indexHeight), new Cell(State.DEAD));
+				cellsMap.put(new Coordinates(indexWidth, indexHeight), new Cell(State.DEAD));
 			}
 		}
 		cells = Collections.unmodifiableMap(cellsMap);
@@ -77,7 +75,7 @@ public class World implements Serializable, Cloneable, Iterable<Entry<ImmutableP
 	 * @return the cell at this position.
 	 */
 	public Cell getCellAt (final int x, final int y) {
-		final ImmutablePair<Integer, Integer> key = new ImmutablePair<>(x, y);
+		final Coordinates key = new Coordinates(x, y);
 		if (!cells.containsKey(key)) {
 			throw new NoSuchElementException("No cell at " + key);
 		}
@@ -87,8 +85,8 @@ public class World implements Serializable, Cloneable, Iterable<Entry<ImmutableP
 	@Override
 	public World clone () throws CloneNotSupportedException {
 		final World clone = (World) super.clone();
-		final Map<ImmutablePair<Integer, Integer>, Cell> cloneCells = new HashMap<>();
-		for (final Entry<ImmutablePair<Integer, Integer>, Cell> entry : cells.entrySet()) {
+		final Map<Coordinates, Cell> cloneCells = new HashMap<>();
+		for (final Entry<Coordinates, Cell> entry : cells.entrySet()) {
 			cloneCells.put(entry.getKey(), entry.getValue().clone());
 		}
 		clone.cells = Collections.unmodifiableMap(cloneCells);
@@ -96,7 +94,7 @@ public class World implements Serializable, Cloneable, Iterable<Entry<ImmutableP
 	}
 	
 	@Override
-	public Iterator<Entry<ImmutablePair<Integer, Integer>, Cell>> iterator () {
+	public Iterator<Entry<Coordinates, Cell>> iterator () {
 		return cells.entrySet().iterator();
 	}
 	

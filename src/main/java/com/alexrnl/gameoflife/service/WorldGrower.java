@@ -5,8 +5,8 @@ import java.util.logging.Logger;
 
 import com.alexrnl.commons.error.ExceptionUtils;
 import com.alexrnl.commons.error.TopLevelError;
-import com.alexrnl.commons.utils.object.ImmutablePair;
 import com.alexrnl.gameoflife.world.Cell;
+import com.alexrnl.gameoflife.world.Coordinates;
 import com.alexrnl.gameoflife.world.World;
 
 /**
@@ -72,7 +72,7 @@ public class WorldGrower {
 			throw new TopLevelError("Clone failed for World class", e);
 		}
 		
-		for (final Entry<ImmutablePair<Integer,Integer>, Cell> entry : world) {
+		for (final Entry<Coordinates, Cell> entry : world) {
 			final int livingNeighbours = getNumberOfLivingNeighbours(reference, entry.getKey());
 			final Cell cell = entry.getValue();
 			if (livingNeighbours < underPopulationThreshold
@@ -97,12 +97,12 @@ public class WorldGrower {
 	 *        the coordinates of the cell.
 	 * @return the number of living neighbours.
 	 */
-	protected int getNumberOfLivingNeighbours (final World world, final ImmutablePair<Integer, Integer> cellCoordinates) {
+	protected int getNumberOfLivingNeighbours (final World world, final Coordinates cellCoordinates) {
 		int numberOfLivingNeighbours = 0;
-		final int centerLine = cellCoordinates.getLeft();
+		final int centerLine = cellCoordinates.getX();
 		final int leftLine = centerLine == 1 ? world.getWidth() : centerLine - 1;
 		final int rightLine = centerLine == world.getWidth() ? 1 : centerLine + 1;
-		final int middleLine = cellCoordinates.getRight();
+		final int middleLine = cellCoordinates.getY();
 		final int upperLine = middleLine == 1 ? world.getHeight() : middleLine - 1;
 		final int lowerLine = middleLine == world.getHeight() ? 1 : middleLine + 1;
 		
