@@ -18,6 +18,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import com.alexrnl.commons.error.TopLevelError;
 import com.alexrnl.gameoflife.world.World;
 
 /**
@@ -112,5 +113,15 @@ public class GameOfLifeControllerTest {
 		
 		controller.grow();
 		verify(secondListener).loopGeneration(any(World.class), eq(1));
+	}
+	
+	/**
+	 * Test method for {@link GameOfLifeController#grow()}.
+	 * Check that a clone exception is throwing a {@link TopLevelError}.
+	 */
+	@Test(expected = TopLevelError.class)
+	public void testGrowWorldCloneException () {
+		doThrow(CloneNotSupportedException.class).when(listener).loopGeneration(any(World.class), eq(1));
+		controller.grow();
 	}
 }
