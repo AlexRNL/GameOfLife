@@ -2,11 +2,11 @@ package com.alexrnl.gameoflife.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -14,7 +14,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -28,6 +27,8 @@ import com.alexrnl.gameoflife.world.World;
 public class GameOfLifeControllerTest {
 	/** The controller to test */
 	private GameOfLifeController	controller;
+	/** The world used by the controller */
+	private World					world;
 	/** The mocked listener */
 	@Mock
 	private WorldListener			listener;
@@ -40,7 +41,8 @@ public class GameOfLifeControllerTest {
 	@Before
 	public void setUp () throws NoSuchAlgorithmException {
 		initMocks(this);
-		controller = new GameOfLifeController(new World(4, 4));
+		world = new World(4, 4);
+		controller = new GameOfLifeController(world);
 		controller.addWorldListener(listener);
 	}
 	
@@ -96,9 +98,19 @@ public class GameOfLifeControllerTest {
 	/**
 	 * Test method for {@link GameOfLifeController#grow()}.
 	 */
-	@Ignore @Test
+	@Test
 	public void testGrow () {
-		fail("Not yet implemented");
+		// Set-up world representation
+		world.getCellAt(2, 1).live();
+		world.getCellAt(2, 2).live();
+		world.getCellAt(2, 3).live();
+		
+		controller.grow();
+		verify(listener).newGeneration(any(World.class));
+		controller.grow();
+		verify(listener, times(2)).newGeneration(any(World.class));
+		controller.grow();
+		verify(listener).loopGeneration(any(World.class), eq(2));
 	}
 	
 	/**
